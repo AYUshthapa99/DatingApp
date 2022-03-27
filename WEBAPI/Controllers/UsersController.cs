@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WEBAPI.Data;
@@ -11,7 +12,7 @@ namespace WEBAPI.Controllers
 {
     [ApiController]
     [Route("api/[Controller]")]
-    public class UsersController : ControllerBase
+    public class UsersController : BaseApiController
     {
         private readonly DataContext _context;
 
@@ -22,12 +23,13 @@ namespace WEBAPI.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult <IEnumerable<AppUser>>> Getusers()
         {
             var users = await _context.Users.ToListAsync();
             return users;
         }
-
+         [Authorize]
           [HttpGet("{id}")]
         public async Task<ActionResult <AppUser>> GetuserbyId(int id)
         {
